@@ -1,11 +1,49 @@
 # Goal 
 
-implement minimalistic skeleton for verification. 
+implement minimalistic visual skeleton for display sequence of follwing senario 
+with a fake dummy pages.
 
-- /agent1/waiting - this is page for full blank black page with white letter 'Display1 for Agent1 - waiting' 
-- /agent1/video1 - video playing page in full screen with <video> element, 
-                   when video play finished, page should be moved to /agent1/acting 
-- /agent1/acting - full white blank page with black letter 'Agent1 - Acting'
+# Senario 
+
+there will be 5 screen, calling it as 'display1', 'display2', ..., 'display5'.
+all 5 screen (display{1,2,3,4,5}) will goes through same phase. 
+
+Phases will be 
+- "before"
+- "greeting"
+- "painpoint_discovery"
+- "opening"
+- "demo"
+- "solution_experience" 
+- "closing" 
+- "after"
+
+for each display and phases there will be unique path for dummy page. 
+
+So following bash expantion expression should be implemented. 
+
+/display{1,2,3,4,5}/{before,greeting,painpoint_discovery,opening,demo,solution_experience,closing,after}
+
+5*8 = 40 pages 
+
+# Video Play 
+
+Only below pages need to play video 
+
+- /display2/opening
+- /display3/opening
+
+- /display2/solution_experience
+- /display3/solution_experience
+- /display4/solution_experience
+- /display5/solution_experience
+
+- /display2/closing
+- /display3/closing
+
+# Page - React Component 
+
+Please make "{DisplayName}{PhaseName}".jsx and route to that component with react-router-dom.
 
 # TechStack 
 

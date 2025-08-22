@@ -27,10 +27,9 @@ const Agent1Video = () => {
         }}
         controls
         autoPlay
-        muted
         onEnded={handleVideoEnd}
       >
-        <source src="/14067324_3840_2160_30fps.mp4" type="video/mp4" />
+        <source src="/CgCVZdcKcqY.webm" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </div>
