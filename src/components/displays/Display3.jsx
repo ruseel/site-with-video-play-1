@@ -1,0 +1,97 @@
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import io from 'socket.io-client'
+
+import Display3Before from './Display3Before'
+import Display3Greeting from './Display3Greeting'
+import Display3PainpointDiscovery from './Display3PainpointDiscovery'
+import Display3Opening from './Display3Opening'
+import Display3Demo from './Display3Demo'
+import Display3SolutionExperience from './Display3SolutionExperience'
+import Display3Closing from './Display3Closing'
+import Display3After from './Display3After'
+
+const tunnelId = 'Display3'
+const socket = io('http://localhost:3000')
+
+socket.on('connect', () => {
+    console.log(`✓ Display3 connected to server`)
+    console.log(`✓ Tunnel ID: ${tunnelId}`)
+    socket.emit('createTunnel', { tunnelId })
+})
+
+socket.on('disconnect', () => {
+    console.log('✗ Display3 disconnected from server')
+})
+
+socket.on('executeJs', (payload) => {
+    if (payload && payload.code) {
+        console.log('> Display3 received code:', payload.code)
+        console.log('> Display3 executing...')
+        
+        try {
+            const originalLog = console.log
+            const logs = []
+            console.log = (...args) => {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                ).join(' '))
+                originalLog(...args)
+            }
+            
+            const result = eval(payload.code)
+            
+            console.log = originalLog
+            
+            if (logs.length > 0) {
+                console.log('> Display3 console output:')
+                logs.forEach(log => console.log(log))
+            }
+            
+            if (result !== undefined) {
+                console.log('> Display3 result:')
+                const resultStr = typeof result === 'object' 
+                    ? JSON.stringify(result, null, 2) 
+                    : String(result)
+                console.log(resultStr)
+            }
+            
+            console.log('✓ Display3 execution completed')
+        } catch (error) {
+            console.log(`✗ Display3 error: ${error.message}`)
+        }
+    }
+})
+
+window.display3Info = {
+    tunnelId,
+    socket,
+    status: 'initialized'
+}
+
+const Display3 = () => {
+    const navigate = useNavigate()
+    
+    useEffect(() => {
+        window.axd = {
+            nav: navigate
+        }
+    }, [navigate])
+
+    return (
+        <Routes>
+            <Route path="before" element={<Display3Before />} />
+            <Route path="greeting" element={<Display3Greeting />} />
+            <Route path="painpoint_discovery" element={<Display3PainpointDiscovery />} />
+            <Route path="opening" element={<Display3Opening />} />
+            <Route path="demo" element={<Display3Demo />} />
+            <Route path="solution_experience" element={<Display3SolutionExperience />} />
+            <Route path="closing" element={<Display3Closing />} />
+            <Route path="after" element={<Display3After />} />
+            <Route path="*" element={<Navigate to="before" replace />} />
+        </Routes>
+    )
+}
+
+export default Display3

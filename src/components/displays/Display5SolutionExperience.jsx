@@ -1,13 +1,7 @@
 import { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 
-const Agent1Video = () => {
+const Display5SolutionExperience = () => {
   const videoRef = useRef(null)
-  const navigate = useNavigate()
-
-  const handleVideoEnd = () => {
-    navigate('/agent1/acting')
-  }
 
   return (
     <div style={{
@@ -27,7 +21,6 @@ const Agent1Video = () => {
         }}
         controls
         autoPlay
-        onEnded={handleVideoEnd}
       >
         <source src="/CgCVZdcKcqY.webm" type="video/mp4" />
         Your browser does not support the video tag.
@@ -36,4 +29,4 @@ const Agent1Video = () => {
   )
 }
 
-export default Agent1Video
+export default Display5SolutionExperience

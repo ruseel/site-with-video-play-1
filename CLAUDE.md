@@ -43,7 +43,11 @@ Only below pages need to play video
 
 # Page - React Component 
 
-Please make "{DisplayName}{PhaseName}".jsx and route to that component with react-router-dom.
+Please make "{DisplayName}.jsx" and "{DisplayName}{PhaseName}".jsx and route to that component with react-router-dom with nested routing.
+
+Inside "{DisplayName}.jsx" please initialize socket.io socket as App.jsx does with tunnel id setted with "{DisplayName}" in global name space. 
+
+And register axd.nav function like "{DisplayName}.jsx" does. exact copy will works. 
 
 # TechStack 
 
