@@ -1,6 +1,4 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
 import { useJsEvalTunnel } from '../../hooks/useJsEvalTunnel'
 
 import Display4Before from './Display4Before'
@@ -13,14 +11,7 @@ import Display4Closing from './Display4Closing'
 import Display4After from './Display4After'
 
 const Display4 = () => {
-    const navigate = useNavigate()
     useJsEvalTunnel('display4')
-    
-    useEffect(() => {
-        window.axd = {
-            nav: navigate
-        }
-    }, [navigate])
 
     return (
         <Routes>
