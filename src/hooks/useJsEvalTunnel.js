@@ -74,21 +74,11 @@ export const useJsEvalTunnel = (tunnelId) => {
           }
         }
       })
-      
-      // Store in window object for backward compatibility
-      const displayNumber = tunnelId.replace('Display', '')
-      window[`display${displayNumber}Info`] = {
-        tunnelId,
-        socket: currentSocket,
-        status: 'initialized'
-      }
     }
     
-    // Cleanup function - only runs when component fully unmounts
     return () => {
       // We don't disconnect here because the socket should persist
       // across phase changes within the same display
-      console.log(`✓ Component cleanup for ${tunnelId}`)
     }
   }, [tunnelId])
   

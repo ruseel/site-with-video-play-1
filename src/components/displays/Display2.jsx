@@ -14,7 +14,7 @@ import Display2After from './Display2After'
 
 const Display2 = () => {
     const navigate = useNavigate()
-    useJsEvalTunnel('Display2')
+    useJsEvalTunnel('display2')
     
     useEffect(() => {
         window.axd = {

@@ -14,7 +14,7 @@ import Display3After from './Display3After'
 
 const Display3 = () => {
     const navigate = useNavigate()
-    useJsEvalTunnel('Display3')
+    useJsEvalTunnel('display3')
     
     useEffect(() => {
         window.axd = {
