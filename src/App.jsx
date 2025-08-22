@@ -8,6 +8,9 @@ import Display3 from './components/displays/Display3'
 import Display4 from './components/displays/Display4'
 import Display5 from './components/displays/Display5'
 
+// Docent Dashboard
+import DocentDashboard from './components/DocentDashboard'
+
 function App() {
   const navigate = useNavigate()
   
@@ -20,6 +23,9 @@ function App() {
   return (
       <Routes>
         <Route path="/" element={<Navigate to="/display1/before" replace />} />
+        
+        {/* Docent Dashboard */}
+        <Route path="/docent" element={<DocentDashboard />} />
         
         {/* Display routes with nested routing */}
         <Route path="/display1/*" element={<Display1 />} />
