@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import io from 'socket.io-client'
+import { useJsEvalTunnel } from '../../hooks/useJsEvalTunnel'
 
 import Display5Before from './Display5Before'
 import Display5Greeting from './Display5Greeting'
@@ -12,66 +12,9 @@ import Display5SolutionExperience from './Display5SolutionExperience'
 import Display5Closing from './Display5Closing'
 import Display5After from './Display5After'
 
-const tunnelId = 'Display5'
-const socket = io('http://localhost:3000')
-
-socket.on('connect', () => {
-    console.log(`✓ Display5 connected to server`)
-    console.log(`✓ Tunnel ID: ${tunnelId}`)
-    socket.emit('createTunnel', { tunnelId })
-})
-
-socket.on('disconnect', () => {
-    console.log('✗ Display5 disconnected from server')
-})
-
-socket.on('executeJs', (payload) => {
-    if (payload && payload.code) {
-        console.log('> Display5 received code:', payload.code)
-        console.log('> Display5 executing...')
-        
-        try {
-            const originalLog = console.log
-            const logs = []
-            console.log = (...args) => {
-                logs.push(args.map(arg => 
-                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-                ).join(' '))
-                originalLog(...args)
-            }
-            
-            const result = eval(payload.code)
-            
-            console.log = originalLog
-            
-            if (logs.length > 0) {
-                console.log('> Display5 console output:')
-                logs.forEach(log => console.log(log))
-            }
-            
-            if (result !== undefined) {
-                console.log('> Display5 result:')
-                const resultStr = typeof result === 'object' 
-                    ? JSON.stringify(result, null, 2) 
-                    : String(result)
-                console.log(resultStr)
-            }
-            
-            console.log('✓ Display5 execution completed')
-        } catch (error) {
-            console.log(`✗ Display5 error: ${error.message}`)
-        }
-    }
-})
-
-window.display5Info = {
-    tunnelId,
-    socket,
-    status: 'initialized'
-}
-
 const Display5 = () => {
     const navigate = useNavigate()
+    useJsEvalTunnel('Display5')
     
     useEffect(() => {
         window.axd = {
