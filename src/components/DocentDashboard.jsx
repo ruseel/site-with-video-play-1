@@ -172,7 +172,7 @@ const DocentDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-4 pt-8">
-      <div className="max-w-[1200px] ml-0 mr-auto">
+      <div className="w-full">
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="text-left">
@@ -209,7 +209,7 @@ const DocentDashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <div className="lg:col-span-3">
-            <div className="p-4">
+            <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl">
                   <Settings className="w-5 h-5 text-white" />
