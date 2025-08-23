@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ArrowRight, Monitor, Clock, Play, Users, Settings, Zap, Target, MessageSquare, Video, CheckCircle } from 'lucide-react'
@@ -171,35 +171,35 @@ const DocentDashboard = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-6">
-      <div className="max-w-[1400px] mx-auto">
-        <div className="mb-12">
-          <div className="text-center mb-8">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-4 tracking-tight">
-              도슨트 컨트롤 센터
-            </h1>
-            <p className="text-xl text-slate-600 font-medium">프레젠테이션 단계 제어 시스템</p>
-          </div>
-          <div className="flex justify-center">
-            <div className="flex items-center gap-4 bg-white/70 backdrop-blur-sm rounded-2xl px-8 py-4 border border-slate-200/50 shadow-lg">
-              <div className="flex items-center gap-3">
-                <Monitor className="w-6 h-6 text-slate-500" />
-                <span className="text-lg font-semibold text-slate-700">연결 상태</span>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-4 pt-8">
+      <div className="max-w-[1200px] ml-0 mr-auto">
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-left">
+              <h1 className="text-4xl font-thin bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-2 tracking-tight">
+                도슨트 컨트롤 센터
+              </h1>
+              <p className="text-lg text-slate-600 font-medium">프레젠테이션 단계 제어 시스템</p>
+            </div>
+            <div className="bg-white/70 backdrop-blur-sm rounded-xl px-6 py-3 border border-slate-200/50 shadow-lg flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Monitor className="w-5 h-5 text-slate-500" />
+                <span className="text-sm font-semibold text-slate-700">연결 상태</span>
               </div>
               <div className="w-px h-6 bg-slate-300"></div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 {isConnected ? (
                   <>
                     <div className="relative">
                       <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
                       <div className="absolute inset-0 w-3 h-3 bg-emerald-400 rounded-full animate-ping"></div>
                     </div>
-                    <span className="text-base font-semibold text-emerald-700">서버 연결됨</span>
+                    <span className="text-sm font-semibold text-emerald-700">연결됨</span>
                   </>
                 ) : (
                   <>
                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                    <span className="text-base font-semibold text-red-700">서버 연결 끊김</span>
+                    <span className="text-sm font-semibold text-red-700">연결 끊김</span>
                   </>
                 )}
               </div>
@@ -207,50 +207,49 @@ const DocentDashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-10">
-          <div className="xl:col-span-3">
-            <div className="bg-white/90 backdrop-blur-lg rounded-3xl border border-slate-200/60 p-12 shadow-2xl shadow-slate-300/20">
-              <div className="flex items-center gap-4 mb-10">
-                <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl">
-                  <Settings className="w-7 h-7 text-white" />
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="lg:col-span-3">
+            <div className="p-4">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl">
+                  <Settings className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-800 tracking-tight">프레젠테이션 단계</h2>
-                  <p className="text-slate-600">각 단계를 클릭하여 디스플레이를 제어하세요</p>
+                  <h2 className="text-xl font-bold text-slate-800 tracking-tight">단계로 전환</h2>
                 </div>
               </div>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-4 gap-3">
                 {phases.map((phase) => (
                   <button
                     key={phase.key}
                     onClick={() => handlePhaseTransition(`'${phase.name}'단계로 전환`, phase.key, phase.displays)}
                     disabled={phase.disabled}
                     className={`
-                      group relative h-44 rounded-2xl transition-all duration-300 transform border-2
+                      group relative h-32 rounded-xl transition-all duration-300 transform border-2
                       ${phase.disabled 
                         ? `${phase.bgColor} ${phase.borderColor} cursor-not-allowed opacity-60` 
-                        : `${phase.bgColor} ${phase.borderColor} cursor-pointer hover:shadow-xl hover:shadow-current/10 hover:scale-[1.03] active:scale-[0.97] ${phase.glowColor || ''}`
+                        : `${phase.bgColor} ${phase.borderColor} cursor-pointer hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${phase.glowColor || ''}`
                       }
                     `}
                   >
-                    <div className="flex flex-col items-center justify-center h-full space-y-4 px-4">
-                      <div className={`p-4 rounded-xl transition-all duration-300 ${phase.disabled ? 'bg-white/60' : 'bg-white/25 group-hover:bg-white/35'}`}>
+                    <div className="flex flex-col items-center justify-center h-full space-y-2 px-2">
+                      <div className={`p-2 rounded-lg transition-all duration-300 ${phase.disabled ? 'bg-white/60' : 'bg-white/25 group-hover:bg-white/35'}`}>
                         <div className={`${phase.iconColor} transition-colors duration-200`}>
-                          {phase.icon}
+                          {React.cloneElement(phase.icon, { className: "w-5 h-5" })}
                         </div>
                       </div>
-                      <div className="text-center space-y-2">
-                        <div className={`font-bold text-lg leading-tight ${phase.textColor}`}>
+                      <div className="text-center space-y-1">
+                        <div className={`font-bold text-sm leading-tight ${phase.textColor}`}>
                           {phase.name}
                         </div>
-                        <div className={`text-sm font-medium opacity-90 ${phase.disabled ? 'text-gray-400' : phase.textColor}`}>
-                          {phase.description}
+                        <div className={`text-xs font-light opacity-80 ${phase.disabled ? 'text-gray-400' : 'text-white'}`}>
+                          단계로 전환
                         </div>
                       </div>
                       {phase.displays.length > 0 && (
-                        <div className="flex gap-1.5 flex-wrap justify-center">
+                        <div className="flex gap-0.5 flex-wrap justify-center">
                           {phase.displays.map(d => (
-                            <span key={d} className="px-2.5 py-1 text-xs bg-white/30 backdrop-blur text-white rounded-lg font-semibold border border-white/20">
+                            <span key={d} className="px-1 py-0.5 text-[10px] bg-white/30 backdrop-blur text-white rounded font-medium border border-white/20">
                               D{d}
                             </span>
                           ))}
@@ -258,7 +257,7 @@ const DocentDashboard = () => {
                       )}
                     </div>
                     {!phase.disabled && (
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     )}
                   </button>
                 ))}
@@ -266,54 +265,54 @@ const DocentDashboard = () => {
             </div>
           </div>
 
-          <div className="xl:col-span-1">
-            <div className="bg-white/90 backdrop-blur-lg rounded-3xl border border-slate-200/60 shadow-2xl shadow-slate-300/20 h-[600px] flex flex-col">
-              <div className="p-6 border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-3xl">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl">
-                    <Clock className="w-5 h-5 text-white" />
+          <div className="lg:col-span-2">
+            <div className="h-[500px] flex flex-col">
+              <div className="p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="p-1.5 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                    <Clock className="w-4 h-4 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800">활동 로그</h3>
+                  <h3 className="text-lg font-bold text-slate-800">활동 로그</h3>
                 </div>
                 <p className="text-sm text-slate-600 font-medium">실시간 작업 기록 모니터링</p>
               </div>
-              <div className="flex-1 overflow-hidden p-6">
-                <ScrollArea className="h-full pr-3">
+              <div className="flex-1 overflow-hidden p-4">
+                <ScrollArea className="h-full pr-2">
                   {actionLog.length === 0 ? (
-                    <div className="text-center py-16">
-                      <div className="p-4 bg-slate-100 rounded-2xl inline-block mb-4">
-                        <Clock className="w-8 h-8 text-slate-400" />
+                    <div className="text-center py-12">
+                      <div className="p-3 bg-slate-100 rounded-xl inline-block mb-3">
+                        <Clock className="w-6 h-6 text-slate-400" />
                       </div>
-                      <p className="text-slate-500 font-medium">작업 기록이 없습니다</p>
-                      <p className="text-slate-400 text-sm mt-1">버튼을 눌러 작업을 시작하세요</p>
+                      <p className="text-slate-500 font-medium text-sm">작업 기록이 없습니다</p>
+                      <p className="text-slate-400 text-xs mt-1">버튼을 눌러 작업을 시작하세요</p>
                     </div>
                   ) : (
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {actionLog.map((log, index) => (
-                        <div key={log.id} className={`p-4 rounded-xl border-2 transition-all duration-200 hover:shadow-md ${
+                        <div key={log.id} className={`p-3 rounded-lg border-2 transition-all duration-200 hover:shadow-md ${
                           index === 0 
                             ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200' 
                             : 'bg-gradient-to-r from-slate-50 to-gray-50 border-slate-200'
                         }`}>
-                          <div className="flex justify-between items-start mb-3">
-                            <span className={`font-bold text-sm px-3 py-1 rounded-lg ${
+                          <div className="flex justify-between items-start mb-2">
+                            <span className={`font-bold text-xs px-2 py-1 rounded ${
                               index === 0 
                                 ? 'bg-blue-200 text-blue-800' 
                                 : 'bg-slate-200 text-slate-700'
                             }`}>
                               {log.phase}
                             </span>
-                            <span className="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded-md">
+                            <span className="text-xs text-slate-500 font-medium bg-slate-100 px-1.5 py-0.5 rounded">
                               {log.timestamp}
                             </span>
                           </div>
-                          <div className="text-slate-700 text-sm leading-relaxed font-medium mb-3">
+                          <div className="text-slate-700 text-xs leading-relaxed font-medium mb-2">
                             {log.action}
                           </div>
                           {log.displays.length > 0 && (
-                            <div className="flex gap-2 flex-wrap">
+                            <div className="flex gap-1.5 flex-wrap">
                               {log.displays.map(d => (
-                                <span key={d} className="px-2.5 py-1 text-xs bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-800 rounded-lg font-bold border border-emerald-200">
+                                <span key={d} className="px-2 py-0.5 text-xs bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-800 rounded font-bold border border-emerald-200">
                                   Display {d}
                                 </span>
                               ))}
