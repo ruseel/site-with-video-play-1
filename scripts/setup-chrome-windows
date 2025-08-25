@@ -1,0 +1,143 @@
+#!/usr/bin/osascript
+use AppleScript version "2.4"
+use framework "Foundation"
+use framework "AppKit"
+use scripting additions
+
+on getMonitorInfos()
+    -- Get a list of all NSScreen objects for the connected displays.
+    set allScreens to current application's NSScreen's screens()
+    set mainScreen to current application's NSScreen's mainScreen()
+    set mainFrame to mainScreen's frame()
+    set mainHeight to current application's NSMaxY(mainFrame)
+
+    set frames to {}
+    -- Loop through each screen object.
+    repeat with aScreen in allScreens
+        -- Get the visible frame, which excludes the menu bar and Dock.
+        set nsFrame to aScreen's frame()
+        -- Extract NSScreen frame values
+        set x to current application's NSMinX(nsFrame)
+        set y to current application's NSMinY(nsFrame)
+        set w to current application's NSWidth(nsFrame)
+        set h to current application's NSHeight(nsFrame)
+
+        -- Convert to AppleScript bounds (top-left origin)
+        set asLeft to x
+        set asTop to mainHeight - (y + h)  -- Flip Y coordinate
+        set asRight to x + w
+        set asBottom to mainHeight - y
+
+        set xs to { name: aScreen's localizedName() as text, ¬
+            nsFrame: {x:x, y:y, width:w, height:h}, ¬
+            asBounds:{asLeft, asTop, asRight, asBottom} }
+
+        -- Add the extracted geometry as a record to our list.
+        set end of frames to xs
+        log xs
+    end repeat
+
+    return frames
+end getMonitorInfos
+
+on findLargestMonitor(monitorInfos)
+    set largestArea to 0
+    set largestMonitor to item 1 of monitorInfos
+    
+    repeat with m in monitorInfos
+        set w to width of nsFrame of m
+        set h to height of nsFrame of m
+        set area to w * h
+        
+        if area > largestArea then
+            set largestArea to area
+            set largestMonitor to m
+        end if
+    end repeat
+    
+    return largestMonitor
+end findLargestMonitor
+
+-- Get monitor info
+global infos
+set infos to getMonitorInfos()
+
+-- Log all available monitors
+log "Available monitors:"
+repeat with m in infos
+    log "Monitor: " & (name of m) & " - Bounds: " & (asBounds of m as string)
+end repeat
+
+-- Find the largest monitor
+set largestMonitor to findLargestMonitor(infos)
+set monitorBounds to asBounds of largestMonitor
+log "Using largest monitor: " & (name of largestMonitor)
+
+-- Extract monitor bounds
+set monitorLeft to item 1 of monitorBounds
+set monitorTop to item 2 of monitorBounds
+set monitorRight to item 3 of monitorBounds
+set monitorBottom to item 4 of monitorBounds
+
+set monitorWidth to monitorRight - monitorLeft
+set monitorHeight to monitorBottom - monitorTop
+
+-- Calculate window dimensions
+-- Left side for displays (50% of width), right side for docent (50% of width)
+set leftSideWidth to monitorWidth / 2
+set rightSideWidth to monitorWidth / 2
+
+-- Display windows: 2 columns x 3 rows
+set displayWidth to leftSideWidth / 2
+set displayHeight to monitorHeight / 3
+
+-- Quit Chrome if it's running
+tell application "System Events"
+    if exists (processes where name is "Google Chrome") then
+        tell application "Google Chrome" to quit
+        delay 2
+    end if
+end tell
+
+-- Launch Chrome with autoplay policy
+do shell script "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --autoplay-policy=no-user-gesture-required > /dev/null 2>&1 &"
+delay 3
+
+tell application "Google Chrome"
+    activate
+    
+    -- Create Display 1 window (top-left)
+    set win1 to make new window
+    set URL of active tab of win1 to "http://localhost:5173/display1/before"
+    set bounds of win1 to {monitorLeft, monitorTop, monitorLeft + displayWidth, monitorTop + displayHeight}
+    
+    -- Create Display 2 window (middle-left)
+    set win2 to make new window
+    set URL of active tab of win2 to "http://localhost:5173/display2/before"
+    set bounds of win2 to {monitorLeft, monitorTop + displayHeight, monitorLeft + displayWidth, monitorTop + (2 * displayHeight)}
+    
+    -- Create Display 3 window (top-middle of left side)
+    set win3 to make new window
+    set URL of active tab of win3 to "http://localhost:5173/display3/before"
+    set bounds of win3 to {monitorLeft + displayWidth, monitorTop + (1 * displayHeight), monitorLeft + leftSideWidth, monitorTop + (2* displayHeight)}
+    
+    -- Create Display 4 window (bottom-left)
+    set win4 to make new window
+    set URL of active tab of win4 to "http://localhost:5173/display4/before"
+    set bounds of win4 to {monitorLeft, monitorTop + (2 * displayHeight), monitorLeft + displayWidth, monitorBottom}
+    
+    -- Create Display 5 window (bottom-right of left side)
+    set win5 to make new window
+    set URL of active tab of win5 to "http://localhost:5173/display5/before"
+    set bounds of win5 to {monitorLeft + displayWidth, monitorTop + (2 * displayHeight), monitorLeft + leftSideWidth, monitorBottom}
+    
+    -- Create Docent window (right half)
+    set winDocent to make new window
+    set URL of active tab of winDocent to "http://localhost:5173/docent"
+    set bounds of winDocent to {monitorLeft + leftSideWidth, monitorTop, monitorRight, monitorBottom}
+    
+end tell
+
+log "Chrome windows setup complete!"
+log "Display windows 1-5 are arranged in a 2x3 grid on the left"
+log "Docent window is on the right half of the screen"
